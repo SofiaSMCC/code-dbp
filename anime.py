@@ -37,8 +37,6 @@ topAnilist = [
       "generos": ["action", "adventure", "drama", "fantasy"]
     }
   ]
-
-
 #method get
 @app.route('/anime', methods = ['GET'])
 def get():
@@ -62,7 +60,7 @@ def add_anime():
                  'generos': request.json['generos']
                  }
     topAnilist.append(new_anime)
-    return topAnilist
+    return new_anime
 
 #method put
 @app.route('/anime/<int:id>', methods=['PUT'])
@@ -78,13 +76,13 @@ def change_anime(id):
             return anime
 
 #method patch
-#@app.route('/anime/<int:id>', methods=['PATCH'])
-#def partial_change_anime(id):
-#    for anime in topAnilist:
-#        if(anime["id"] == id):
-#
-#    return topAnilist
-
+@app.route('/anime/<int:id>', methods=['PATCH'])
+def partial_change_anime(id):
+    cambio = request.get_json()
+    for anime in topAnilist:
+        if(anime["id"] == id):
+            anime.update(cambio)
+            return anime
 
 #method delete
 @app.route('/anime/<int:id>', methods=['DELETE'])
@@ -93,7 +91,6 @@ def delete_anime(id):
         if(anime["id"] == id):
             topAnilist.remove(anime)
     return topAnilist
-
 
 if __name__ == '__main__':
    app.run(debug = True)
