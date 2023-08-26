@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask import request
 
 app = Flask(__name__)
@@ -27,16 +27,17 @@ def getAnime(id):
 #method post
 @app.route('/anime', methods=['POST'])
 def addAnime():
-    new_anime = {'id': request.json['id'],
-                 'titulo': request.json['titulo'],
-                 'puntaje': request.json['puntaje'],
-                 'tipo': request.json['tipo'],
-                 'season': request.json['season'],
-                 'generos': request.json['generos']
+    new_anime = {'id': request.json.get('id'),
+                 'titulo': request.json.get('titulo'),
+                 'puntaje': request.json.get('puntaje'),
+                 'tipo': request.json.get('tipo'),
+                 'season': request.json.get('season'),
+                 'generos': request.json.get('generos')
                  }
     for anime in topAnilist:
         if(new_anime['id']==anime['id']):
             return '400.'
+            break
     topAnilist.append(new_anime)
     return new_anime
 
