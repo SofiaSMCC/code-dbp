@@ -45,12 +45,12 @@ def addAnime():
 def changeAnime(id):
     for anime in topAnilist:
         if(anime['id'] == id):
-            anime['id'] = request.json.get['id']
-            anime['titulo'] = request.json.get['titulo']
-            anime['puntaje'] = request.json.get['puntaje']
-            anime['tipo'] =  request.json.get['tipo']
-            anime['season'] =  request.json.get['season']
-            anime['generos'] = request.json.get['generos']
+            anime['id'] = request.json.get('id')
+            anime['titulo'] = request.json.get('titulo')
+            anime['puntaje'] = request.json.get('puntaje')
+            anime['tipo'] =  request.json.get('tipo')
+            anime['season'] =  request.json.get('season')
+            anime['generos'] = request.json.get('generos')
             return anime
     return "202"
 
