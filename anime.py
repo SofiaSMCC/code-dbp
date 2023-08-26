@@ -27,7 +27,7 @@ def getAnime(id):
 #method post
 @app.route('/anime', methods=['POST'])
 def addAnime():
-    new_anime = {'id': request.json.get['id'],
+    new_anime = {'id': request.json['id'],
                  'titulo': request.json['titulo'],
                  'puntaje': request.json['puntaje'],
                  'tipo': request.json['tipo'],
