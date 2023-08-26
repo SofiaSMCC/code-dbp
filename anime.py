@@ -1,96 +1,77 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask import request
 
 app = Flask(__name__)
 
 topAnilist = [
-    {
-      "id": 0,
-      "titulo": "Gintama: THE FINAL",
-      "puntaje": 91,
-      "tipo":  "movie",
-      "season":  "THE FINAL",
-      "generos": ["action", "comedy", "drama", "sci-fi"]
-    },
-    {
-      "id": 1,
-      "titulo": "Gintama",
-      "puntaje": 90,
-      "tipo":  "TV Show",
-      "season":  "4",
-      "generos": ["action", "comedy", "drama", "sci-fi"]
-    },
-    {
-      "id": 2,
-      "titulo": "Fruits Basket: The Final",
-      "puntaje": 90,
-      "tipo":  "TV Show",
-      "season":  "3",
-      "generos": ["comedy", "drama", "psychological", "romance"]
-    },
-    {
-      "id": 3,
-      "titulo": "Hagane no Renkinjutsushi: FULLMETAL ALCHEMIST",
-      "puntaje": 90,
-      "tipo":  "TV Show",
-      "season":  "1",
-      "generos": ["action", "adventure", "drama", "fantasy"]
-    }
+    {"id": 0, "titulo": "Gintama: THE FINAL", "puntaje": 91, "tipo":  "movie", "season":  "THE FINAL", "generos": ["action", "comedy", "drama", "sci-fi"]},
+    {"id": 1, "titulo": "Gintama", "puntaje": 90, "tipo":  "TV Show", "season":  "4", "generos": ["action", "comedy", "drama", "sci-fi"]},
+    {"id": 2, "titulo": "Fruits Basket: The Final", "puntaje": 90, "tipo":  "TV Show", "season":  "3", "generos": ["comedy", "drama", "psychological", "romance"]},
+    {"id": 3, "titulo": "Hagane no Renkinjutsushi: FULLMETAL ALCHEMIST", "puntaje": 90, "tipo":  "TV Show", "season":  "1", "generos": ["action", "adventure", "drama", "fantasy"]}
   ]
+
 #method get
 @app.route('/anime', methods = ['GET'])
-def get():
+def getList():
     return topAnilist
 
 #method get especific
 @app.route('/anime/<int:id>', methods=['GET'])
-def get_anime(id):
+def getAnime(id):
     for anime in topAnilist:
        if (anime['id'] == id):
           return anime
+       else:
+          return "404. Anime no encontrado."
 
 #method post
 @app.route('/anime', methods=['POST'])
-def add_anime():
-    new_anime = {'id': request.json['id'],
+def addAnime():
+    new_anime = {'id': request.json.get['id'],
                  'titulo': request.json['titulo'],
                  'puntaje': request.json['puntaje'],
-                 'tipo':  request.json['tipo'],
-                 'season':  request.json['season'],
+                 'tipo': request.json['tipo'],
+                 'season': request.json['season'],
                  'generos': request.json['generos']
                  }
+    for anime in topAnilist:
+        if(new_anime['id']==anime['id']):
+            return '400.'
     topAnilist.append(new_anime)
     return new_anime
 
 #method put
 @app.route('/anime/<int:id>', methods=['PUT'])
-def change_anime(id):
+def changeAnime(id):
     for anime in topAnilist:
-        if(anime["id"] == id):
-            anime['id'] = request.json['id']
-            anime['titulo'] = request.json['titulo']
-            anime['puntaje'] = request.json['puntaje']
-            anime['tipo'] =  request.json['tipo']
-            anime['season'] =  request.json['season']
-            anime['generos'] = request.json['generos']
+        if(anime['id'] == id):
+            anime['id'] = request.json.get['id']
+            anime['titulo'] = request.json.get['titulo']
+            anime['puntaje'] = request.json.get['puntaje']
+            anime['tipo'] =  request.json.get['tipo']
+            anime['season'] =  request.json.get['season']
+            anime['generos'] = request.json.get['generos']
             return anime
+    return "202"
 
 #method patch
 @app.route('/anime/<int:id>', methods=['PATCH'])
-def partial_change_anime(id):
-    cambio = request.get_json()
+def partialChange(id):
+    change = request.get_json()
     for anime in topAnilist:
         if(anime["id"] == id):
-            anime.update(cambio)
+            anime.update(change)
             return anime
+    return "404. No existe el anime."
 
 #method delete
 @app.route('/anime/<int:id>', methods=['DELETE'])
-def delete_anime(id):
+def deleteAnime(id):
     for anime in topAnilist:
         if(anime["id"] == id):
             topAnilist.remove(anime)
-    return topAnilist
+            return topAnilist
+    return "404. No existe el anime."
 
 if __name__ == '__main__':
    app.run(debug = True)
